@@ -1,3 +1,6 @@
+require('dotenv').config();
+
+
 const fileInput = document.getElementById('FileInput');
 const button = document.getElementById('Button');
 const result = document.getElementById('Result');
