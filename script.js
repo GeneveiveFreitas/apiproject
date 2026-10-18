@@ -1,12 +1,6 @@
-require('dotenv').config();
-
-
 const fileInput = document.getElementById('FileInput');
 const button = document.getElementById('Button');
 const result = document.getElementById('Result');
-
-const apiKey = process.env.API_KEY;
-const apiSecret = process.env.SECRET_API_KEY;
 
 button.addEventListener('click', async () => {
   const file = fileInput.files[0];
@@ -23,11 +17,8 @@ button.addEventListener('click', async () => {
     const formData = new FormData();
     formData.append('image_upload', file);
 
-    const response = await fetch('https://api.imagga.com/v2/colors', {
+    const response = await fetch('/api/analyze-colors', {
       method: 'POST',
-      headers: {
-        Authorization: `Basic ${btoa(`${apiKey}:${apiSecret}`)}`
-      },
       body: formData
     });
     const data = await response.json();
