@@ -14,10 +14,12 @@ export default async function handler(req, res) {
         const response = await fetch('https://api.imagga.com/v2/colors', {
             method: 'POST',
             headers: {
-                'Authorization': `Basic ${Buffer.from(`\({apiKey}:\){apiSecret}`).toString('base64')}`,
-                'Content-Type': req.headers['content-type'] // Pass along the form data boundary
+
+                'Authorization': `Basic ${Buffer.from(`${apiKey}:${apiSecret}`).toString('base64')}`,
+                'Content-Type': req.headers['content-type']
             },
-            body: req
+            body: req,
+            duplex: 'half'
         });
 
         const data = await response.json();
