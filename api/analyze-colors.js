@@ -27,7 +27,7 @@ export default async function handler(req, res) {
 
         const formData = new FormData();
         formData.append(
-            'image_upload',
+            'image',
             new Blob([imageBuffer], {
                 type: typeof contentType === 'string' && contentType.startsWith('image/')
                     ? contentType
@@ -36,14 +36,28 @@ export default async function handler(req, res) {
             'image'
         );
 
-        const response = await fetch('https://api.imagga.com/v2/colors', {
+        const authorization = `Basic ${Buffer.from(`${apiKey}:${apiSecret}`).toString('base64')}`;
+        const uploadResponse = await fetch('https://api.imagga.com/v2/uploads', {
             method: 'POST',
-            headers: {
-                'Authorization': `Basic ${Buffer.from(`${apiKey}:${apiSecret}`).toString('base64')}`
-            },
+            headers: { 'Authorization': authorization },
             body: formData
         });
+        const uploadData = await uploadResponse.json();
 
+        if (!uploadResponse.ok) {
+            return res.status(uploadResponse.status).json(uploadData);
+        }
+
+        const uploadId = uploadData.result?.upload_id;
+        if (!uploadId) {
+            return res.status(502).json({ error: 'Image upload did not return an upload ID.' });
+        }
+
+        const colorsUrl = new URL('https://api.imagga.com/v2/colors');
+        colorsUrl.searchParams.set('image_upload_id', uploadId);
+        const response = await fetch(colorsUrl, {
+            headers: { 'Authorization': authorization }
+        });
         const data = await response.json();
         
         return res.status(response.status).json(data);
