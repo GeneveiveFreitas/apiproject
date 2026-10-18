@@ -14,12 +14,12 @@ button.addEventListener('click', async () => {
   result.textContent = 'Analyzing image...';
 
   try {
-    const formData = new FormData();
-    formData.append('image_upload', file);
-
     const response = await fetch('/api/analyze-colors', {
       method: 'POST',
-      body: formData
+      headers: {
+        'Content-Type': file.type || 'application/octet-stream'
+      },
+      body: file
     });
     const data = await response.json();
 
