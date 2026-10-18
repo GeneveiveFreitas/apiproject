@@ -14,12 +14,23 @@ button.addEventListener('click', async () => {
   result.textContent = 'Analyzing image...';
 
   try {
+    const imageBuffer = await file.arrayBuffer();
+    let binary = '';
+    const bytes = new Uint8Array(imageBuffer);
+
+    for (let offset = 0; offset < bytes.length; offset += 0x8000) {
+      binary += String.fromCharCode(...bytes.subarray(offset, offset + 0x8000));
+    }
+
     const response = await fetch('/api/analyze-colors', {
       method: 'POST',
       headers: {
-        'Content-Type': file.type || 'application/octet-stream'
+        'Content-Type': 'application/json'
       },
-      body: file
+      body: JSON.stringify({
+        image: btoa(binary),
+        contentType: file.type
+      })
     });
     const data = await response.json();
 

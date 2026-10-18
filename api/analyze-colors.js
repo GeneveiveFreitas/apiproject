@@ -10,21 +10,29 @@ export default async function handler(req, res) {
     try {
         const apiKey = process.env.API_KEY;
         const apiSecret = process.env.SECRET_API_KEY;
-        const chunks = [];
 
-        for await (const chunk of req) {
-            chunks.push(Buffer.isBuffer(chunk) ? chunk : Buffer.from(chunk));
+        if (!apiKey || !apiSecret) {
+            return res.status(500).json({ error: 'Image analysis credentials are not configured.' });
         }
 
-        const image = Buffer.concat(chunks);
-        if (image.length === 0) {
+        const { image, contentType } = req.body || {};
+        if (typeof image !== 'string' || !/^[A-Za-z0-9+/]+={0,2}$/.test(image)) {
+            return res.status(400).json({ error: 'Please upload an image.' });
+        }
+
+        const imageBuffer = Buffer.from(image, 'base64');
+        if (imageBuffer.length === 0) {
             return res.status(400).json({ error: 'Please upload an image.' });
         }
 
         const formData = new FormData();
         formData.append(
             'image_upload',
-            new Blob([image], { type: req.headers['content-type'] || 'application/octet-stream' }),
+            new Blob([imageBuffer], {
+                type: typeof contentType === 'string' && contentType.startsWith('image/')
+                    ? contentType
+                    : 'application/octet-stream'
+            }),
             'image'
         );
 
