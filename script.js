@@ -2,8 +2,8 @@ const fileInput = document.getElementById('FileInput');
 const button = document.getElementById('Button');
 const result = document.getElementById('Result');
 
-const apiKey = 'acc_5bba5691eabd61a';
-const apiSecret = '8b49010981fc62bf09331208eaba3c7e';
+const apiKey = process.env.API_KEY;
+const apiSecret = process.env.SECRET_API_KEY;
 
 button.addEventListener('click', async () => {
   const file = fileInput.files[0];
