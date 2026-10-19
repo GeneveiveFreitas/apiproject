@@ -1,6 +1,12 @@
 const fileInput = document.getElementById('FileInput');
 const button = document.getElementById('Button');
 const result = document.getElementById('Result');
+const colorOverlay = document.getElementById('colorOverlay');
+const closeOverlayButton = document.getElementById('closeOverlay');
+
+closeOverlayButton.addEventListener('click', () => {
+  colorOverlay.classList.remove('active');
+});
 
 button.addEventListener('click', async () => {
   const file = fileInput.files[0];
@@ -53,9 +59,9 @@ button.addEventListener('click', async () => {
         const overlayCode = document.getElementById('overlayCode');
 
         overlayColor.style.backgroundColor = colorCode;
-        overlayName.textContent = 'Loading color details...';
+        overlayName.textContent = color.closest_palette_color || 'Image color';
         overlayCode.textContent = '';
-        document.getElementById('colorOverlay').classList.add('active');
+        colorOverlay.classList.add('active');
 
         try {
           const url = new URL('https://www.thecolorapi.com/id');
@@ -65,9 +71,7 @@ button.addEventListener('click', async () => {
           if (!response.ok) {
             throw new Error(`Color API request failed (${response.status}).`);
           }
-
           const colorData = await response.json();
-          overlayName.textContent = colorData.name?.value || color.closest_palette_color || 'Image color';
           const hex = colorData.hex?.value || colorCode;
           const rgb = colorData.rgb?.value;
           overlayCode.textContent = rgb ? `HEX: ${hex} | RGB: ${rgb}` : `HEX: ${hex}`;
