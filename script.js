@@ -6,7 +6,6 @@ button.addEventListener('click', async () => {
   const file = fileInput.files[0];
 
   if (!file) {
-    result.textContent = 'Choose an image first.';
     return;
   }
 
@@ -38,33 +37,51 @@ button.addEventListener('click', async () => {
     result.replaceChildren();
 
     if (colors.length === 0) {
-      result.textContent = JSON.stringify(data, null, 2);
+      console.error('Image analysis returned no colors.', data);
       return;
     }
 
     for (const color of colors) {
       const swatch = document.createElement('span');
-      const colorCode = color.html_code;
-      swatch.textContent = colorCode || color.closest_palette_color || 'Color';
-      swatch.title = `${color.closest_palette_color || 'Image color'} ${colorCode || ''}`;
-      swatch.style.display = 'inline-block';
-      swatch.style.width = '100px';
-      swatch.style.height = '72px';
-      swatch.style.margin = '6px';
-      swatch.style.padding = '6px';
-      swatch.style.boxSizing = 'border-box';
-      swatch.style.backgroundColor = colorCode || '#ffffff';
-      swatch.style.border = '1px solid #888';
-      swatch.addEventListener('click', () => {
-        document.getElementById('overlayColor').style.backgroundColor = colorCode || '#ffffff';
-        document.getElementById('overlayName').textContent = color.closest_palette_color || 'Image color';
-        document.getElementById('overlayCode').textContent = colorCode || '';
+      const colorCode = color.html_code || '#ffffff';
+      swatch.className = 'swatch';
+      swatch.style.backgroundColor = colorCode;
+      swatch.title = `${color.closest_palette_color || 'Image color'} ${colorCode}`;
+      swatch.addEventListener('click', async () => {
+        const overlayColor = document.getElementById('overlayColor');
+        const overlayName = document.getElementById('overlayName');
+        const overlayCode = document.getElementById('overlayCode');
+
+        overlayColor.style.backgroundColor = colorCode;
+        overlayName.textContent = 'Loading color details...';
+        overlayCode.textContent = '';
         document.getElementById('colorOverlay').classList.add('active');
+
+        try {
+          const url = new URL('https://www.thecolorapi.com/id');
+          url.searchParams.set('hex', colorCode.replace(/^#/, ''));
+
+          const response = await fetch(url);
+          if (!response.ok) {
+            throw new Error(`Color API request failed (${response.status}).`);
+          }
+
+          const colorData = await response.json();
+          overlayName.textContent = colorData.name?.value || color.closest_palette_color || 'Image color';
+          const hex = colorData.hex?.value || colorCode;
+          const rgb = colorData.rgb?.value;
+          overlayCode.textContent = rgb ? `HEX: ${hex} | RGB: ${rgb}` : `HEX: ${hex}`;
+        } catch (error) {
+          overlayName.textContent = color.closest_palette_color || 'Image color';
+          overlayCode.textContent = `HEX: ${colorCode}`;
+          console.error('Could not load color details.', error);
+        }
       });
       result.append(swatch);
     }
   } catch (error) {
-    result.textContent = `Could not analyze image: ${error.message}`;
+    result.replaceChildren();
+    console.error('Could not analyze image.', error);
   } finally {
     button.disabled = false;
   }

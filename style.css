@@ -44,3 +44,13 @@
   padding: 8px 14px;
   cursor: pointer;
 }
+
+.swatch {
+     display: inline-block;
+      width: 100px;
+      height: 72px;
+      margin: 6px;
+      padding: 6px;
+      box-sizing: border-box;
+      border: 1px solid #888;
+    }
