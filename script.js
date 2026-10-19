@@ -55,6 +55,12 @@ button.addEventListener('click', async () => {
       swatch.style.boxSizing = 'border-box';
       swatch.style.backgroundColor = colorCode || '#ffffff';
       swatch.style.border = '1px solid #888';
+      swatch.addEventListener('click', () => {
+        document.getElementById('overlayColor').style.backgroundColor = colorCode || '#ffffff';
+        document.getElementById('overlayName').textContent = color.closest_palette_color || 'Image color';
+        document.getElementById('overlayCode').textContent = colorCode || '';
+        document.getElementById('colorOverlay').classList.add('active');
+      });
       result.append(swatch);
     }
   } catch (error) {
