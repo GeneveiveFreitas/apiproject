@@ -60,7 +60,7 @@ button.addEventListener('click', async () => {
 
         overlayColor.style.backgroundColor = colorCode;
         overlayName.textContent = color.closest_palette_color || 'Image color';
-        overlayCode.textContent = '';
+        overlayCode.textContent = 'Loading color details...';
         colorOverlay.classList.add('active');
 
         try {
@@ -72,12 +72,19 @@ button.addEventListener('click', async () => {
             throw new Error(`Color API request failed (${response.status}).`);
           }
           const colorData = await response.json();
-          const hex = colorData.hex?.value || colorCode;
-          const rgb = colorData.rgb?.value;
-          overlayCode.textContent = rgb ? `HEX: ${hex} | RGB: ${rgb}` : `HEX: ${hex}`;
+          const details = [
+            ['HEX', colorData.hex?.value],
+            ['RGB', colorData.rgb?.value],
+            ['HSL', colorData.hsl?.value],
+            ['HSV', colorData.hsv?.value],
+            ['CMYK', colorData.cmyk?.value]
+          ].filter(([, value]) => value);
+
+          overlayCode.textContent = details.length
+            ? details.map(([format, value]) => `${format}: ${value}`).join('\n')
+            : 'The API returned no color details.';
         } catch (error) {
-          overlayName.textContent = color.closest_palette_color || 'Image color';
-          overlayCode.textContent = `HEX: ${colorCode}`;
+          overlayCode.textContent = 'Could not load color details.';
           console.error('Could not load color details.', error);
         }
       });
