@@ -10,8 +10,12 @@
 
     <h1>Color Palette Converter</h1>
 
-    <input type="file" id="FileInput" accept="image/*">
-    <button type="button" id="Button">Go</button>
+    <div id="ImagePreviewFrame">
+        <input type="file" id="FileInput" accept="image/*">
+        <img id="ImagePreview" alt="Selected image preview" hidden>
+        <button type="button" id="ClearImageButton" aria-label="Remove selected image">&times;</button>
+    </div>
+    <button type="button" id="Button" hidden>Find Colors</button>
     <pre id="Result" role="status" aria-live="polite"></pre>
 
     <div id="colorOverlay" class="overlay">
