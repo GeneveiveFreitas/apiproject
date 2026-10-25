@@ -1,8 +1,40 @@
 
 const fileInput = document.getElementById('FileInput');
+const imagePreview = document.getElementById('ImagePreview');
+const imagePreviewFrame = document.getElementById('ImagePreviewFrame');
 const button = document.getElementById('Button');
 const result = document.getElementById('Result');
 const colorOverlay = document.getElementById('colorOverlay');
+let previewUrl;
+
+fileInput.addEventListener('change', () => {
+  if (previewUrl) {
+    URL.revokeObjectURL(previewUrl);
+    previewUrl = undefined;
+  }
+
+  const file = fileInput.files[0];
+  if (!file) {
+    fileInput.hidden = false;
+    button.hidden = true;
+    imagePreview.hidden = true;
+    imagePreview.removeAttribute('src');
+    imagePreviewFrame.classList.remove('has-image');
+    return;
+  }
+
+  previewUrl = URL.createObjectURL(file);
+  fileInput.hidden = true;
+  button.hidden = false;
+  imagePreview.src = previewUrl;
+  imagePreview.hidden = false;
+  imagePreviewFrame.classList.add('has-image');
+});
+
+document.getElementById('ClearImageButton').addEventListener('click', () => {
+  fileInput.value = '';
+  fileInput.dispatchEvent(new Event('change'));
+});
 
 document.getElementById('closeOverlay').addEventListener('click', () => {
   colorOverlay.classList.remove('active');
