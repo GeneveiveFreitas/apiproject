@@ -53,10 +53,21 @@ h1 {
   position: absolute;
   top: 8px;
   right: 12px;
+  width: 32px;
+  height: 32px;
+  padding: 0;
   border: none;
-  background: none;
+  border-radius: 50%;
+  background: white;
+  color: black;
   font-size: 28px;
+  line-height: 1;
   cursor: pointer;
+}
+
+.close-btn:hover {
+  background: black;
+  color: white;
 }
 
 .swatch {
