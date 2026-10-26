@@ -57,15 +57,16 @@ h1 {
   box-sizing: border-box;
   align-items: center;
   justify-content: center;
-  color: white;
   text-align: center;
-  text-shadow:
-    -1px -1px 0 #000,
-    1px -1px 0 #000,
-    -1px 1px 0 #000,
-    1px 1px 0 #000;
   cursor: pointer;
   transition: transform 150ms ease, box-shadow 150ms ease;
+}
+
+.swatch-code {
+  padding: 4px 6px;
+  border-radius: 6px;
+  background: black;
+  color: white;
 }
 
 .swatch:hover {

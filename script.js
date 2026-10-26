@@ -17,6 +17,9 @@ fileInput.addEventListener('change', () => {
   if (!file) {
     fileInput.hidden = false;
     button.hidden = true;
+    button.disabled = false;
+    result.replaceChildren();
+    colorOverlay.classList.remove('active');
     imagePreview.hidden = true;
     imagePreview.removeAttribute('src');
     imagePreviewFrame.classList.remove('has-image');
@@ -97,9 +100,12 @@ button.addEventListener('click', async () => {
 
       const code = color.html_code || '#ffffff';
       const name = color.closest_palette_color || 'Image color';
+      const codeLabel = document.createElement('span');
 
       swatch.style.backgroundColor = code;
-      swatch.textContent = code.toUpperCase();
+      codeLabel.className = 'swatch-code';
+      codeLabel.textContent = code.toUpperCase();
+      swatch.append(codeLabel);
       swatch.title = `${name} ${code}`;
 
       swatch.addEventListener('click', async () => {
