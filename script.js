@@ -64,22 +64,36 @@ button.addEventListener('click', async () => {
       })
     });
 
-    const data = await response.json();
-    const colors = data.result?.colors?.image_colors || [];
+    const responseText = await response.text();
+    let data;
+
+    try {
+      data = responseText ? JSON.parse(responseText) : {};
+    } catch {
+      throw new Error(`Color analysis returned an invalid response (HTTP ${response.status}).`);
+    }
+
+    if (!data || typeof data !== 'object') {
+      throw new Error(`Color analysis returned an invalid response (HTTP ${response.status}).`);
+    }
+
+    if (!response.ok) {
+      const message = data.error || data.status?.text;
+      throw new Error(
+        typeof message === 'string' ? message : `Color analysis failed (HTTP ${response.status}).`
+      );
+    }
+
+    const colors = data.result?.colors?.image_colors;
+    if (!Array.isArray(colors) || colors.length === 0) {
+      throw new Error('The color service returned no image colors. Try another image.');
+    }
 
     result.replaceChildren();
 
-    Array.from({ length: 5 }, (_, index) => colors[index]).forEach(color => {
+    colors.slice(0, 5).forEach(color => {
       const swatch = document.createElement('span');
       swatch.className = 'swatch';
-
-      if (!color) {
-        swatch.classList.add('swatch-placeholder');
-        swatch.title = 'No color available';
-        swatch.setAttribute('aria-hidden', 'true');
-        result.append(swatch);
-        return;
-      }
 
       const code = color.html_code || '#ffffff';
       const name = color.closest_palette_color || 'Image color';
@@ -117,8 +131,10 @@ button.addEventListener('click', async () => {
 
       result.append(swatch);
     });
-  } catch {
-    result.replaceChildren();
+  } catch (error) {
+    result.textContent = error instanceof Error
+      ? error.message
+      : 'Color analysis failed. Please try again.';
   } finally {
     button.disabled = false;
   }
