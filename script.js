@@ -100,12 +100,14 @@ button.addEventListener('click', async () => {
 
       const code = color.html_code || '#ffffff';
       const name = color.closest_palette_color || 'Image color';
+      const colorBlock = document.createElement('span');
       const codeLabel = document.createElement('span');
 
-      swatch.style.backgroundColor = code;
+      colorBlock.className = 'swatch-color';
+      colorBlock.style.backgroundColor = code;
       codeLabel.className = 'swatch-code';
       codeLabel.textContent = code.toUpperCase();
-      swatch.append(codeLabel);
+      swatch.append(colorBlock, codeLabel);
       swatch.title = `${name} ${code}`;
 
       swatch.addEventListener('click', async () => {
