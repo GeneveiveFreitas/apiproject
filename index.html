@@ -10,13 +10,17 @@
 
     <h1>Color Palette Converter</h1>
 
-    <div id="ImagePreviewFrame">
-        <input type="file" id="FileInput" accept="image/*">
-        <img id="ImagePreview" alt="Selected image preview" hidden>
-        <button type="button" id="ClearImageButton" aria-label="Remove selected image">&times;</button>
+    <div class="palette-layout">
+        <div class="image-controls">
+            <div id="ImagePreviewFrame">
+                <input type="file" id="FileInput" accept="image/*">
+                <img id="ImagePreview" alt="Selected image preview" hidden>
+                <button type="button" id="ClearImageButton" aria-label="Remove selected image">&times;</button>
+            </div>
+            <button type="button" id="Button" hidden>Find Colors</button>
+        </div>
+        <pre id="Result" role="status" aria-live="polite"></pre>
     </div>
-    <button type="button" id="Button" hidden>Find Colors</button>
-    <pre id="Result" role="status" aria-live="polite"></pre>
 
     <div id="colorOverlay" class="overlay">
   <div class="overlay-content">

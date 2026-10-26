@@ -99,6 +99,7 @@ button.addEventListener('click', async () => {
       const name = color.closest_palette_color || 'Image color';
 
       swatch.style.backgroundColor = code;
+      swatch.textContent = code.toUpperCase();
       swatch.title = `${name} ${code}`;
 
       swatch.addEventListener('click', async () => {

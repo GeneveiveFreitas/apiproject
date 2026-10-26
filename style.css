@@ -51,20 +51,57 @@ h1 {
 }
 
 .swatch {
-  display: inline-block;
+  display: flex;
   width: 100px;
   height: 72px;
   box-sizing: border-box;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  text-align: center;
+  text-shadow:
+    -1px -1px 0 #000,
+    1px -1px 0 #000,
+    -1px 1px 0 #000,
+    1px 1px 0 #000;
+  cursor: pointer;
+  transition: transform 150ms ease, box-shadow 150ms ease;
+}
+
+.swatch:hover {
+  transform: scale(1.06);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.palette-layout {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 32px;
+  width: min(100%, 900px);
+  margin: 0 auto;
+  padding: 0 16px;
+  box-sizing: border-box;
+}
+
+.image-controls {
+  flex: 1 1 480px;
+  min-width: 0;
 }
 
 #Result {
-  display: flex;
+  display: grid;
+  flex: 0 1 216px;
+  grid-template-columns: repeat(2, 100px);
   justify-content: center;
-  align-items: center;
-  flex-wrap: wrap;
+  align-content: center;
   gap: 16px;
   margin: 16px auto;
   padding: 0;
+}
+
+#Result:empty {
+  display: none;
 }
 
 #ImagePreviewFrame {
@@ -142,8 +179,8 @@ button:hover {
   padding: 0;
   border: none;
   border-radius: 50%;
-  background: black;
-  color: white;
+  background: white;
+  color: black;
   font-size: 24px;
   line-height: 1;
 }
@@ -153,6 +190,21 @@ button:hover {
 }
 
 #ClearImageButton:hover {
-  background: white;
-  color: black;
+  background: black;
+  color: white;
+}
+
+@media (max-width: 700px) {
+  .palette-layout {
+    flex-direction: column;
+    gap: 0;
+  }
+
+  .image-controls {
+    width: 100%;
+  }
+
+  #Result {
+    flex-basis: auto;
+  }
 }
