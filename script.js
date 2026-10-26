@@ -69,12 +69,21 @@ button.addEventListener('click', async () => {
 
     result.replaceChildren();
 
-    colors.forEach(color => {
+    Array.from({ length: 5 }, (_, index) => colors[index]).forEach(color => {
+      const swatch = document.createElement('span');
+      swatch.className = 'swatch';
+
+      if (!color) {
+        swatch.classList.add('swatch-placeholder');
+        swatch.title = 'No color available';
+        swatch.setAttribute('aria-hidden', 'true');
+        result.append(swatch);
+        return;
+      }
+
       const code = color.html_code || '#ffffff';
       const name = color.closest_palette_color || 'Image color';
-      const swatch = document.createElement('span');
 
-      swatch.className = 'swatch';
       swatch.style.backgroundColor = code;
       swatch.title = `${name} ${code}`;
 

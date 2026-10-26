@@ -1,5 +1,4 @@
 
-
 h1 {
   text-align: center;
   font-family: Arial, sans-serif;
@@ -52,14 +51,25 @@ h1 {
 }
 
 .swatch {
-     display: inline-block;
-      width: 100px;
-      height: 72px;
-      margin: 16px auto;
-      padding: 6px;
-      box-sizing: border-box;
-      border: 1px solid #888;
-    }
+  display: inline-block;
+  width: 100px;
+  height: 72px;
+  box-sizing: border-box;
+}
+
+#Result {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin: 16px auto;
+  padding: 0;
+}
+
+.swatch-placeholder {
+  background: #eee;
+}
 
 #ImagePreviewFrame {
   position: relative;
@@ -69,7 +79,7 @@ h1 {
   box-sizing: border-box;
   justify-content: center;
   align-items: center;
-  border: 10px solid #ccc;
+  border: 3px dashed #70c8ff;
   margin: 16px auto;
 }
 
@@ -78,12 +88,32 @@ h1 {
 }
 
 #FileInput::file-selector-button {
-  font-size: 16px;
+  font-size: 15px;
+  padding: 10px 18px;
+  color: white;
+  background: #70c8ff;
+  border: none;
+  outline: none;
+  border-radius: 10px;
+}
+
+button:hover {
+  opacity: 0.8;
+}
+
+#FileInput::file-selector-button:hover {
+  background: #132c3b;
 }
 
 #Button {
   display: block;
   margin: 16px auto;
+  border: none;
+  outline: none;
+  color: white;
+  background: #70c8ff;
+  border-radius: 10px;
+  padding: 10px 18px;
 }
 
 #Button[hidden] {
@@ -114,15 +144,19 @@ h1 {
   width: 32px;
   height: 32px;
   padding: 0;
-  border: 1px solid white;
+  border: none;
   border-radius: 50%;
-  background: white;
-  color: #ccc;
+  background: black;
+  color: white;
   font-size: 24px;
   line-height: 1;
-  cursor: pointer;
 }
 
 #ImagePreviewFrame.has-image #ClearImageButton {
   display: block;
+}
+
+#ClearImageButton:hover {
+  background: white;
+  color: black;
 }
