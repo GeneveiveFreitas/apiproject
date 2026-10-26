@@ -1,4 +1,10 @@
-body {
+body,
+button,
+input,
+select,
+textarea,
+#Result,
+#FileInput::file-selector-button {
   font-family: Arial, sans-serif;
 }
 
